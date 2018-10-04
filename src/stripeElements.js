@@ -24,7 +24,7 @@ export const baseStyle = {
 }
 
 function init(key, options = {}) {
-  if (typeof key === "object" && typeof key.elements === "function") {
+  if (typeof key === 'object' && typeof key.elements === 'function') {
     Stripe.instance = key
   }
 
@@ -47,17 +47,19 @@ export function create(elementType, key_or_stripe, options = {}) {
 
   const element = Stripe.elements.create(elementType, options)
 
-  Stripe.createToken = (options) => Stripe.instance.createToken(element, options)
-  Stripe.createSource = (options) => Stripe.instance.createSource(element, options)
-  Stripe.retrieveSource = (options) => Stripe.instance.retrieveSource(options)
+  Stripe.createToken = options => Stripe.instance.createToken(element, options)
+  Stripe.createSource = options =>
+    Stripe.instance.createSource(element, options)
+  Stripe.retrieveSource = options => Stripe.instance.retrieveSource(options)
 
   return element
 }
 
 export function destroy() {
-    Stripe.instance = null
-    Stripe.elements = null
-    Stripe.createToken = null
-    Stripe.createSource = null
-    Stripe.retrieveSource = null
+  if (Stripe.elements && Stripe.elements._elements.length > 0) return
+  Stripe.instance = null
+  Stripe.elements = null
+  Stripe.createToken = null
+  Stripe.createSource = null
+  Stripe.retrieveSource = null
 }
